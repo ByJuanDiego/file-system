@@ -10,7 +10,7 @@
 #include "fixedrecord.hpp"
 
 void test1() {
-    fixed_record fr("./data/datos1.txt");
+    p1::fixed_record fr("./data/datos1.txt");
 
     do {
         int option;
