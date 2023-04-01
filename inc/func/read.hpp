@@ -8,11 +8,11 @@
 #include <iostream>
 #include <string>
 
-void readFromConsole(char buffer[], int size) {
+void read_from_console(char buffer[], int size) {
     std::string temp;
     std::cin >> temp;
 
-    for (int i = 0; i < (size - 1); i++) {
+    for (int i = 0; i < size; i++) {
         buffer[i] = (i < temp.size()) ? temp[i] : ' ';
     }
 

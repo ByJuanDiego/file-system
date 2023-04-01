@@ -1,9 +1,3 @@
-0001 Howard     Paredes Zegarra     Computacion    
-0002 Penny      Vargas Cordero      Industrial     
-0003 Sheldon    Cooper Vega         Mecatronica    
-0004 Pamela     Vargas Cordero      Industrial     
-0005 Vanesa     Cooper Quizpe       Mecatronica    
-0006 Jesus      Vega Cordero        Industrial     
-0007 Heider     Sanchez Quizpe      Mecatronica    
-0008 Juan-Diego Castro              Computacion    
-0009 Juan-Diego Laredo              Computacion    
+0001 Juan       Castro              CS            
+0002 Juan       Laredo              CS            
+0003 Juan       Prochazka           CS            

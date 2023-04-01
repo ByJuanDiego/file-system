@@ -5,8 +5,9 @@
 #ifndef FILE_SYSTEM_ALUMNO1_HPP
 #define FILE_SYSTEM_ALUMNO1_HPP
 
-#include <cstring>
 #include <iostream>
+#include <sstream>
+#include <cstring>
 #include <fstream>
 
 #include "../func/read.hpp"
@@ -18,55 +19,52 @@ namespace p1 {
     constexpr int last_name_length = 20;
     constexpr int career_length = 15;
 
-    struct Alumno {
-        char codigo[code_length + 1];
-        char nombre[name_length + 1];
-        char apellidos[last_name_length + 1];
-        char carrera[career_length + 1];
-
-        void init();
-        void append_to_file(const std::string &file_name);
+    struct student {
+        char code[code_length];
+        char name[name_length];
+        char last_name[last_name_length];
+        char career[career_length];
     };
 
-    std::ostream &operator<<(std::ostream &stream, p1::Alumno &p) {
-        stream << p.codigo;
-        stream << p.nombre;
-        stream << p.apellidos;
-        stream << p.carrera;
-        stream << "\n";
+    const int record_size = sizeof(p1::student);
+
+    std::ostream &operator<<(std::ostream &stream, p1::student &p) {
+        stream << p.code << " " << p.name << " " << p.last_name << " " << p.career << "\n";
         stream << std::flush;
         return stream;
     }
 
-    std::istream &operator>>(std::istream &stream, p1::Alumno &p) {
-        stream.get(p.codigo, code_length);
-        stream.get(p.nombre, name_length);
-        stream.get(p.apellidos, last_name_length);
-        stream.get(p.carrera, career_length);
-        stream.get();
+    std::istream &operator>>(std::istream &stream, p1::student &p) {
+        stream.read(p.code, code_length);
+        p.code[code_length - 1] = '\0';
+
+        stream.read(p.name, name_length);
+        p.name[name_length - 1] = '\0';
+
+        stream.read(p.last_name, last_name_length);
+        p.last_name[last_name_length - 1] = '\0';
+
+        stream.read(p.career, career_length);
+        p.career[career_length - 1] = '\0';
         return stream;
     }
 
-    void Alumno::init() {
-        std::cout << "Codigo: ";
-        readFromConsole(codigo, code_length + 1);
-        std::cout << "Nombre: ";
-        readFromConsole(nombre, name_length + 1);
-        std::cout << "Apellidos: ";
-        readFromConsole(apellidos, last_name_length + 1);
-        std::cout << "Carrera: ";
-        readFromConsole(carrera, career_length + 1);
+    void init(p1::student &student) {
+        std::cout << "======= Student Information =======" << std::endl;
+        std::cout << "Code: ";
+        read_from_console(student.code, code_length);
+        std::cout << "Name: ";
+        read_from_console(student.name, name_length);
+        std::cout << "Last name: ";
+        read_from_console(student.last_name, last_name_length);
+        std::cout << "Career: ";
+        read_from_console(student.career, career_length);
     }
 
-    void Alumno::append_to_file(const std::string &file_name)  {
-        std::ofstream out;
-        out.open(file_name, std::ios::app);
-        if (out.is_open()) {
-            out << *this;
-            out.close();
-        } else {
-            std::cerr << "Cannot open the file\n";
-        }
+    std::string to_string(p1::student &student) {
+        std::stringstream ss;
+        ss << "(" << student.code << ", " << student.name << ", " << student.last_name << ", " << student.career << ")";
+        return ss.str();
     }
 }
 
