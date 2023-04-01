@@ -10,14 +10,14 @@
 
 void read_from_console(char buffer[], int size) {
     std::string temp;
-    std::cin >> temp;
+    std::getline(std::cin >> std::ws, temp, '\n');
+    std::cin.clear();
 
     for (int i = 0; i < size; i++) {
         buffer[i] = (i < temp.size()) ? temp[i] : ' ';
     }
 
     buffer[size - 1] = '\0';
-    std::cin.clear();
 }
 
 #endif //FILE_SYSTEM_READ_HPP

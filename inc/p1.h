@@ -5,12 +5,12 @@
 #ifndef FILE_SYSTEM_P1_HPP
 #define FILE_SYSTEM_P1_HPP
 
+#include <limits>
 #include <iostream>
 #include "fixedrecord.hpp"
 
 void test1() {
     fixed_record fr("./data/datos1.txt");
-    bool quit = false;
 
     do {
         int option;
@@ -21,12 +21,13 @@ void test1() {
         std::cout << "    [0]: Add a new record" << std::endl;
         std::cout << "    [1]: Read all records" << std::endl;
         std::cout << "    [2]: Read the ith record" << std::endl;
+        std::cout << "    [3]: Exit" << std::endl;
         std::cout << std::endl;
 
         do {
             std::cout << "Select an option: ";
             std::cin >> option;
-        } while (option < 0 || option > 2);
+        } while (option < 0 || option > 3);
         std::cout << std::endl;
 
         switch (option) {
@@ -54,14 +55,17 @@ void test1() {
                 break;
             }
             default: {
+                std::system("clear");
+                return;
             }
         }
 
-        std::cout << std::endl;
-        std::cout << "Exit? [0, 1]: ";
-        std::cin >> quit;
+        std::cout << std::endl << "Press Enter to continue..." << std::endl;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        std::cin.get();
+        std::system("clear");
 
-    } while (!quit);
+    } while (true);
 }
 
 #endif // FILE_SYSTEM_P1_HPP

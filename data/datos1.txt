@@ -1,3 +1,24 @@
-0001 Juan       Castro              CS            
-0002 Juan       Laredo              CS            
-0003 Juan       Prochazka           CS            
+0001 Juan Diego Castro              CS            
+0002 Juan Diego Laredo              CS            
+0003 Juan Diego Prochazka           CS            
+0004 Joaquin    Jordan              CS            
+0005 Ana Maria  Accilio             CS            
+0006 Paolo      Vasquez             CS            
+0007 Heider     Sanchez             CS            
+0008 Samanta    Chang               CS            
+0009 Diego      Paredes             CS            
+0010 Renato     Cernades            CS            
+0011 Gabriel    Espinoza            CS            
+0012 Natali     Pilco               CS            
+0013 Manyory    Cueva               CS            
+0014 Fatima     Villon              DS            
+0015 Roger      Huauya              CS            
+0016 Mishelle   Villarreal          CS            
+0017 Salvador   Olivares            CS            
+0018 Ana Paula  Guerrero            Industrial    
+0019 Arturo     Barrantes           DS            
+0020 Katya      Montes              Ambiental     
+0021 Marcelo    Zuloeta             CS            
+0022 Nahia      Escalante           CS            
+0023 Jose       Chachi              CS            
+0024 Luis       Izaguirre           CS            

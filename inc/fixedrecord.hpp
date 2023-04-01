@@ -24,10 +24,9 @@ class fixed_record {
     }
 
 public:
-    explicit fixed_record(std::string file_name) : file_name(std::move(file_name)) {
-    }
+    explicit fixed_record(std::string file_name);
 
-    ~fixed_record() = default;
+    ~fixed_record();
 
     std::vector<p1::student> load();
 
@@ -35,6 +34,11 @@ public:
 
     p1::student read_record(int pos);
 };
+
+fixed_record::fixed_record(std::string file_name) : file_name(std::move(file_name)) {
+}
+
+fixed_record::~fixed_record() = default;
 
 std::vector<p1::student> fixed_record::load() {
     file.open(file_name, std::ios::in);
