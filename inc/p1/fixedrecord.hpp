@@ -9,7 +9,7 @@
 #include <utility>
 #include <vector>
 
-#include "alumno1.hpp"
+#include "student1.hpp"
 
 namespace p1 {
     class fixed_record {

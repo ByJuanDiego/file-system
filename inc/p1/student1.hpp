@@ -2,8 +2,8 @@
 // Created by juandiego on 3/31/23.
 //
 
-#ifndef FILE_SYSTEM_ALUMNO1_HPP
-#define FILE_SYSTEM_ALUMNO1_HPP
+#ifndef FILE_SYSTEM_STUDENT1_HPP
+#define FILE_SYSTEM_STUDENT1_HPP
 
 #include <iostream>
 #include <sstream>
@@ -70,4 +70,4 @@ namespace p1 {
     }
 }
 
-#endif //FILE_SYSTEM_ALUMNO1_HPP
+#endif //FILE_SYSTEM_STUDENT1_HPP
