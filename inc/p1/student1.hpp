@@ -52,8 +52,6 @@ namespace p1 {
     void init(p1::student &student) {
         std::cout << "======= Student Information =======" << std::endl;
         std::cout << "Code: ";
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-
         read_from_console(student.code, code_length);
         std::cout << "Name: ";
         read_from_console(student.name, name_length);
