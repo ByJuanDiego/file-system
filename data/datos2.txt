@@ -1,5 +1,8 @@
-Howard|Paredes Zegarra|Computacion|1500.00 
+Nombre|Apellidos|Carrera|Mensualidad
+Howard|Paredes Zegarra|Computacion|1500.00
 Penny|Vargas Cordero|Industrial|2550.50
 Sheldon|Cooper Quizpe|Mecatronica|1850.00
 Lidya|Cooper Quizpe|Mecatronica|1850.00
 Thony|Cooper Quizpe|Mecatronica|1850.00
+Juan Diego|Castro Padilla|Computer Science|2200.51
+Juan Diego|Laredo|Computer Science|2300.53

@@ -21,4 +21,4 @@
 0021 Marcelo    Zuloeta             CS            
 0022 Nahia      Escalante           CS            
 0023 Jose       Chachi              CS            
-0024 Luis       Izaguirre           CS
+0024 Luis       Izaguirre           CS            
