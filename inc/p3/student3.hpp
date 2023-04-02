@@ -2,8 +2,8 @@
 // Created by juandiego on 4/1/23.
 //
 
-#ifndef FILE_SYSTEM_STUDENT_HPP
-#define FILE_SYSTEM_STUDENT_HPP
+#ifndef FILE_SYSTEM_STUDENT3_HPP
+#define FILE_SYSTEM_STUDENT3_HPP
 
 #include <string>
 #include <iostream>
@@ -65,4 +65,4 @@ namespace p3 {
     }
 }
 
-#endif //FILE_SYSTEM_STUDENT_HPP
+#endif //FILE_SYSTEM_STUDENT3_HPP

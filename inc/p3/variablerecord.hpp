@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <fstream>
-#include "student.hpp"
+#include "student3.hpp"
 
 namespace p3 {
     class variable_record {
