@@ -93,9 +93,14 @@ namespace p1 {
         }
         file.seekg(p1::record_size * pos);
         file >> student;
+        
         tmp = this->eliminated;
         if(tmp == nullptr){
             this->eliminated = student; 
+        }
+        else{
+            student->next = this->eliminated;
+            this->eliminated = student;
         }
         
 
