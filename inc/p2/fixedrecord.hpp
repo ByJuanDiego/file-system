@@ -50,6 +50,7 @@ namespace p1 {
             for (int i = 0; i < n_records; ++i) {
                 p1::student record{};
                 file >> record;
+                if(record->eliminado
                 records.push_back(record);
             }
         }
@@ -93,7 +94,7 @@ namespace p1 {
         }
         file.seekg(p1::record_size * pos);
         file >> student;
-        
+        student->borrado = true;
         tmp = this->eliminated;
         if(tmp == nullptr){
             this->eliminated = student; 
