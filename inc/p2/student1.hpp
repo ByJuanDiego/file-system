@@ -29,6 +29,7 @@ namespace p1 {
         int ciclo;
         float mensualidad;
         student *next;
+        bool borrado = false;
     };
 
     const int record_size = sizeof(p1::student);
