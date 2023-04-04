@@ -47,11 +47,11 @@ namespace p3 {
 
             /// Ignore fields line
             std::getline(file, line, '\n');
+            p3::student record;
 
-            while (std::getline(file, line, '\n')) {
-                p3::student record;
-                /// Fields values are assigned using the current line
-                p3::read(record, (char *) line.c_str());
+            /// https://en.cppreference.com/w/cpp/io/basic_ios/operator_bool
+            /// Fields values are assigned using the current line
+            while (file >> record) {
                 records.push_back(record);
             }
         }
@@ -73,17 +73,15 @@ namespace p3 {
 
             int i = 0;
 
-            /// Reads the first `pos+1` lines (including the fields line)
-            for (; (i < (pos + 1)) && std::getline(file, line, '\n'); ++i);
-
-            /// If the `pos + 1` cannot be reached, it means that the file cannot read more lines,
-            /// then the position is not valid
+            /// Ignores the first `pos+1` records (including the fields line, that's the reason for `+1`)
+            for (; (i < (pos + 1)) && file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); ++i);
+            /// If the `pos + 1` cannot be reached, it means that the file cannot read more lines;
+            /// then, the position is not valid
             if (i != (pos + 1)) {
                 throw std::invalid_argument("invalid position");
             }
 
-            std::getline(file, line, '\n');
-            p3::read(record, (char *) line.c_str());
+            file >> record;
         }
 
         file.close();

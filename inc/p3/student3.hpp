@@ -18,7 +18,7 @@ namespace p3 {
     };
 
     void init(p3::student &student) {
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         std::cout << "======= Student Information =======" << std::endl;
 
@@ -41,20 +41,18 @@ namespace p3 {
         return stream;
     }
 
-    void read(p3::student &p, char * line) {
-        char* cursor = line;
+    std::istream &operator>>(std::istream &stream, p3::student &p) {
+        /// When the end of the file is reached, `stream.fail()` will equal `true` after reading `p.name`.
+        /// Then, the `file >> record` will be casted as `false` and the loop breaks.
+        std::getline(stream, p.name, '|');
+        std::getline(stream, p.last_name, '|');
+        std::getline(stream, p.career, '|');
 
-        cursor = strtok(cursor, "|");
-        p.name = std::string(cursor);
+        std::string payment;
+        std::getline(stream, payment, '\n');
+        p.monthly_payment = (stream.fail()) ? 0.0f : std::stof(payment);
 
-        cursor = strtok(nullptr, "|");
-        p.last_name = std::string(cursor);
-
-        cursor = strtok(nullptr, "|");
-        p.career = std::string(cursor);
-
-        cursor = strtok(nullptr, "\n");
-        p.monthly_payment = std::stof(std::string(cursor));
+        return stream;
     }
 
     std::string to_string(p3::student &student) {

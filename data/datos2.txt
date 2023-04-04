@@ -6,3 +6,4 @@ Lidya|Cooper Quizpe|Mecatronica|1850.00
 Thony|Cooper Quizpe|Mecatronica|1850.00
 Juan Diego|Castro Padilla|Computer Science|2200.51
 Juan Diego|Laredo|Computer Science|2300.53
+Samanta Susana|Chang Kuoman|Computer Science|2100.35
