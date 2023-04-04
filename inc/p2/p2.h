@@ -7,10 +7,9 @@
 
 #include <iostream>
 #include <limits>
-#include "fixedrecord.hpp"
-
+#include "fixedrecord2.hpp"
 void test2() {
-    p1::fixed_record fr("./data/datos1.txt");
+    p2::fixed_record fr("./data/datos1.txt");
 
     do {
         int option;
@@ -21,7 +20,8 @@ void test2() {
         std::cout << "    [0]: Add a new record" << std::endl;
         std::cout << "    [1]: Read all records" << std::endl;
         std::cout << "    [2]: Read the ith record" << std::endl;
-        std::cout << "    [3]: Exit" << std::endl;
+        std::cout << "    [3] Eliminate the ith record" << std::endl;
+        std::cout << "    [4]: Exit" << std::endl;
         std::cout << std::endl;
 
         do {
@@ -32,15 +32,15 @@ void test2() {
 
         switch (option) {
             case 0 : {
-                p1::student student{};
-                p1::init(student);
+                p2::student student{};
+                p2::init(student);
                 fr.add(student);
                 break;
             }
 
             case 1 : {
-                std::vector<p1::student> records = fr.load();
-                for (p1::student &student: records) {
+                std::vector<p2::student> records = fr.load();
+                for (p2::student &student: records) {
                     std::cout << to_string(student) << std::endl;
                 }
                 break;
@@ -50,7 +50,7 @@ void test2() {
                 int position;
                 std::cout << "Enter the record position: ";
                 std::cin >> position;
-                p1::student student = fr.read_record(position);
+                p2::student student = fr.read_record(position);
                 std::cout << "The [" << position << "] student is: " << to_string(student) << std::endl;
                 break;
             }
@@ -58,7 +58,8 @@ void test2() {
                 int position;
                 std::cout << "Enter the record position: ";
                 std::cin >> position;
-                
+                fr.eliminate(position);
+                break;
             }
             default: {
                 std::system("clear");
