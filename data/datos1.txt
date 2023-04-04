@@ -22,3 +22,6 @@
 0022 Nahia      Escalante           CS            
 0023 Jose       Chachi              CS            
 0024 Luis       Izaguirre           CS            
+0025 Diego      Herrera             Arquitectura  
+0026 Gabriel    Romero              CS            
+0027 Jean Paul  Huby                CS            

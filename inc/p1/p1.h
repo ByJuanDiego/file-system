@@ -61,7 +61,9 @@ void test1() {
         }
 
         std::cout << std::endl << "Press Enter to continue..." << std::endl;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        if (option != 0){
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        }
         std::cin.get();
         std::system("clear");
 
