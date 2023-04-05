@@ -12,7 +12,12 @@ int main(int argc, char *argv[]) {
                                                         {"3", test3},
                                                         {"4", test4}};
 
-    test[std::string(((argc == 1) || (test.find(std::string(argv[1])) == test.end())) ? "1" : argv[1])]();
+    test[std::string(((argc == 1) || (test.find(std::string(argv[1])) == test.end())) ? "4" : argv[1])]();
+
+//    std::ofstream out("data.txt", std::ios::binary);
+//    int x = 1231231231;
+//
+//    out.write((char*) &x, sizeof(x));
 
     return EXIT_SUCCESS;
 }
