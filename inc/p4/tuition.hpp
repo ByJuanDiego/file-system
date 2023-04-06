@@ -41,37 +41,44 @@ namespace p4 {
     }
 
     void read(p4::tuition &record, std::fstream &stream) {
-        int n_code_bytes, n_cycle_bytes, n_monthly_payment_bytes, n_observations_bytes;
+        int n_code_bytes, n_observations_bytes;
 
-        /// Reading the code
+        /// Reading the code length
         stream.read((text) &n_code_bytes, int_sz);
-        char* code = new char[n_code_bytes + 1];
+
+        char *code = new char[n_code_bytes + 1];
+        /// Reading the code
         stream.read(code, n_code_bytes);
         code[n_code_bytes] = '\0';
         record.code = code;
-        delete [] code;
+        delete[] code;
 
         /// Reading the cycle
-        stream.read((char *) &n_cycle_bytes, int_sz);
-        stream.read((text) &record.cycle, n_cycle_bytes);
+        stream.read((text) &record.cycle, int_sz);
 
         /// Reading the monthly payment
-        stream.read((char *) &n_monthly_payment_bytes, float_sz);
-        stream.read((text) &record.monthly_payment, n_monthly_payment_bytes);
+        stream.read((text) &record.monthly_payment, int_sz);
 
-        /// Reading the observations
+        /// Reading the observations length
         stream.read((text) &n_observations_bytes, int_sz);
-        char* observations = new char[n_observations_bytes + 1];
+
+        char *observations = new char[n_observations_bytes + 1];
+        /// Reading the observations
         stream.read(observations, n_observations_bytes);
         observations[n_observations_bytes] = '\0';
         record.observations = observations;
-        delete [] observations;
+        delete[] observations;
     }
 
     std::string to_string(p4::tuition &record) {
         std::stringstream ss;
-        ss << "(" << record.code << ", " << record.cycle << ", " << record.monthly_payment << ", "
-           << record.observations << ")";
+        std::cout << record.code << std::endl;
+        ss << "("
+           << record.code << ", "
+           << record.cycle << ", "
+           << record.monthly_payment << ", "
+           << record.observations
+           << ")";
         return ss.str();
     }
 
@@ -79,16 +86,18 @@ namespace p4 {
         int code_length = (int) record.code.length();
         int observations_length = (int) record.observations.length();
 
-        stream.write((text) &code_length, sizeof(code_length));
+        /// Writing the code length (variable length)
+        stream.write((text) &code_length, int_sz);
         stream.write((text) record.code.c_str(), code_length);
 
-        stream.write((text) &int_sz, int_sz);
+        /// Writing the current cycle
         stream.write((text) &record.cycle, int_sz);
 
-        stream.write((text) &float_sz, float_sz);
+        /// Writing the monthly payment
         stream.write((text) &record.monthly_payment, float_sz);
 
-        stream.write((text) &observations_length, sizeof(observations_length));
+        /// Writing the observations (variable length)
+        stream.write((text) &observations_length, int_sz);
         stream.write((text) record.observations.c_str(), observations_length);
 
         return stream;

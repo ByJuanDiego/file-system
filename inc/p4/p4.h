@@ -46,14 +46,14 @@ void test4() {
             }
 
             case 2 : {
-                std::cout << "to-do" << std::endl;
-//                int position;
-//                std::cout << "Enter the record position: ";
-//                std::cin >> position;
-//                p1::student student = fr.read_record(position);
-//                std::cout << "The [" << position << "] student is: " << to_string(student) << std::endl;
-//                break;
+                int position;
+                std::cout << "Enter the record position: ";
+                std::cin >> position;
+                p4::tuition student = vr.read_record(position);
+                std::cout << "The [" << position << "] student is: " << p4::to_string(student) << std::endl;
+                break;
             }
+
             default: {
                 std::system("clear");
                 return;
