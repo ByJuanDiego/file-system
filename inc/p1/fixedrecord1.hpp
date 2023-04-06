@@ -2,8 +2,8 @@
 // Created by juandiego on 3/31/23.
 //
 
-#ifndef FILE_SYSTEM_FIXEDRECORD_HPP
-#define FILE_SYSTEM_FIXEDRECORD_HPP
+#ifndef FILE_SYSTEM_FIXEDRECORD1_HPP
+#define FILE_SYSTEM_FIXEDRECORD1_HPP
 
 #include <fstream>
 #include <utility>
@@ -86,4 +86,4 @@ namespace p1 {
     }
 }
 
-#endif //FILE_SYSTEM_FIXEDRECORD_HPP
+#endif //FILE_SYSTEM_FIXEDRECORD1_HPP

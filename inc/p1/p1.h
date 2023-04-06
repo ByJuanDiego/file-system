@@ -7,7 +7,7 @@
 
 #include <limits>
 #include <iostream>
-#include "fixedrecord.hpp"
+#include "fixedrecord1.hpp"
 
 void test1() {
     p1::fixed_record fr("./data/datos1.txt");

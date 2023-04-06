@@ -9,7 +9,7 @@
 #include "variablerecord.hpp"
 
 void test3() {
-    p3::variable_record vr("./data/datos2.txt");
+    p3::variable_record vr("./data/datos3.txt");
 
     do {
         int option;
