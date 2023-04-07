@@ -1,18 +1,40 @@
-#include <unordered_map>
-#include <iostream>
+#include "../inc/p1.hpp"
+#include "../inc/p2.hpp"
+#include "../inc/p3.hpp"
+#include "../inc/p4.hpp"
 
-#include "../inc/p1/p1.h"
-#include "../inc/p2/p2.h"
-#include "../inc/p3/p3.h"
-#include "../inc/p4/p4.h"
+enum class question {
+    q1 = 1, q2, q3, q4
+};
 
 int main(int argc, char *argv[]) {
-    std::unordered_map<std::string, void (*)()> test = {{"1", test1},
-                                                        {"2", test2},
-                                                        {"3", test3},
-                                                        {"4", test4}};
+    int n_test{};
+    question q;
 
-    test[std::string(((argc == 1) || (test.find(std::string(argv[1])) == test.end())) ? "2" : argv[1])]();
+    if (argc == 1) {
+        do {
+            std::cout << "Enter the test number: ";
+            std::cin >> n_test;
+        } while (n_test < 1 || n_test > 2);
+        q = (question) n_test;
+    } else {
+        q = (question) std::stoi(argv[1]);
+    }
+
+    switch (q) {
+        case question::q1:
+            p1::test("./data/datos1.txt");
+            break;
+        case question::q2:
+            p2::test("./data/datos2.dat");
+            break;
+        case question::q3:
+            p3::test("./data/datos3.txt");
+            break;
+        case question::q4:
+            p4::test("./data/datos4.dat", "./metadata/cabecera4.dat");
+            break;
+    }
 
     return EXIT_SUCCESS;
 }
