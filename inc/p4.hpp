@@ -103,7 +103,11 @@ namespace p4 {
         return stream;
     }
 
-
+    /** Class in charge of manipulate `p4::tuition` struct
+     *
+     * This class allows to write, read, and load `p4::tuition` records from a binary file.
+     * This implementation requires an auxiliary fixed-length record `index_file` used to index the records at `data_file`
+     */
     class variable_record {
     private:
         std::fstream data_file;
@@ -115,16 +119,93 @@ namespace p4 {
     public:
         explicit variable_record(std::string data_file_name, std::string index_file_name);
 
+        ~variable_record();
+
+        /// Load all the records in memory
         std::vector<p4::tuition> load();
 
+        /// Append a record from memory to a disk file.
+        /// First, the member function writes the position of the record in the index file
+        /// and then writes the record in the data file.
         void add(p4::tuition &record);
 
+        /// Search the `record_pos` in the index file and then open the data file an seeks the `record_pos`
+        /// to load the `p4::tuition` in memory and return it.
         p4::tuition read_record(int pos);
     };
+
+    // test function, internally, instantiates a `p4::variable_record` and use it to manipulate a disk file
+    void test(const std::string &data_file, const std::string &header_file) {
+        p4::variable_record vr(data_file, header_file);
+
+        do {
+            int option;
+
+            std::cout << std::endl;
+            std::cout << "============== Menu ==============" << std::endl;
+            std::cout << "Options " << std::endl;
+            std::cout << "    [0]: Add a new record" << std::endl;
+            std::cout << "    [1]: Read all records" << std::endl;
+            std::cout << "    [2]: Read the ith record" << std::endl;
+            std::cout << "    [3]: Exit" << std::endl;
+            std::cout << std::endl;
+
+            do {
+                std::cout << "Select an option: ";
+                std::cin >> option;
+            } while (option < 0 || option > 3);
+            std::cout << std::endl;
+
+            switch (option) {
+                case 0 : {
+                    p4::tuition tuition{};
+                    p4::init(tuition);
+                    vr.add(tuition);
+                    break;
+                }
+
+                case 1 : {
+                    std::vector<p4::tuition> records = vr.load();
+                    for (p4::tuition &tuition: records) {
+                        std::cout << to_string(tuition) << std::endl;
+                    }
+                    break;
+                }
+
+                case 2 : {
+                    int position;
+                    std::cout << "Enter the record position: ";
+                    std::cin >> position;
+                    p4::tuition student = vr.read_record(position);
+                    std::cout << "The [" << position << "] student is: " << p4::to_string(student) << std::endl;
+                    break;
+                }
+
+                default: {
+                    std::system("clear");
+                    return;
+                }
+            }
+
+            std::cout << std::endl << "Press Enter to continue..." << std::endl;
+            if (option != 0) {
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+            std::cin.get();
+            std::system("clear");
+
+        } while (true);
+    }
+}
+
+
+namespace p4 {
 
     variable_record::variable_record(std::string data_file_name, std::string index_file_name)
             : data_file_name(std::move(data_file_name)),
               index_file_name(std::move((index_file_name))) {}
+
+    variable_record::~variable_record() = default;
 
     std::vector<p4::tuition> variable_record::load() {
         index_file.open(index_file_name, std::ios::in | std::ios::binary);
@@ -215,68 +296,6 @@ namespace p4 {
         data_file.close();
 
         return record;
-    }
-
-    void test(const std::string &data_file, const std::string &header_file) {
-        p4::variable_record vr(data_file, header_file);
-
-        do {
-            int option;
-
-            std::cout << std::endl;
-            std::cout << "============== Menu ==============" << std::endl;
-            std::cout << "Options " << std::endl;
-            std::cout << "    [0]: Add a new record" << std::endl;
-            std::cout << "    [1]: Read all records" << std::endl;
-            std::cout << "    [2]: Read the ith record" << std::endl;
-            std::cout << "    [3]: Exit" << std::endl;
-            std::cout << std::endl;
-
-            do {
-                std::cout << "Select an option: ";
-                std::cin >> option;
-            } while (option < 0 || option > 3);
-            std::cout << std::endl;
-
-            switch (option) {
-                case 0 : {
-                    p4::tuition tuition{};
-                    p4::init(tuition);
-                    vr.add(tuition);
-                    break;
-                }
-
-                case 1 : {
-                    std::vector<p4::tuition> records = vr.load();
-                    for (p4::tuition &tuition: records) {
-                        std::cout << to_string(tuition) << std::endl;
-                    }
-                    break;
-                }
-
-                case 2 : {
-                    int position;
-                    std::cout << "Enter the record position: ";
-                    std::cin >> position;
-                    p4::tuition student = vr.read_record(position);
-                    std::cout << "The [" << position << "] student is: " << p4::to_string(student) << std::endl;
-                    break;
-                }
-
-                default: {
-                    std::system("clear");
-                    return;
-                }
-            }
-
-            std::cout << std::endl << "Press Enter to continue..." << std::endl;
-            if (option != 0) {
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            }
-            std::cin.get();
-            std::system("clear");
-
-        } while (true);
     }
 }
 

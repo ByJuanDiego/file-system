@@ -61,24 +61,17 @@ namespace p2 {
 
     void init(p2::student &student) {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
         std::cout << "======= Student Information =======" << std::endl;
-
         std::cout << "Code: ";
         read_from_console(student.code, code_length);
-
         std::cout << "Name: ";
         read_from_console(student.name, name_length);
-
         std::cout << "Last name: ";
         read_from_console(student.last_name, last_name_length);
-
         std::cout << "Career: ";
         read_from_console(student.career, career_length);
-
         std::cout << "Cycle: ";
         std::cin >> student.cycle;
-
         std::cout << "Monthly Payment: ";
         std::cin >> student.monthly_payment;
     }
@@ -96,8 +89,12 @@ namespace p2 {
         return ss.str();
     }
 
+    /** Class in charge of manipulate `p2::student` struct
+     *
+     * This class allows to write, read, load and delete `p2::student` records from a binary file.
+     * Uses a implementation of `free-list` to delete a record logically.
+     */
     class fixed_record {
-
         std::fstream file;
         std::string file_name;
 
@@ -106,15 +103,90 @@ namespace p2 {
 
         ~fixed_record();
 
+        /// Loads all the records in memory
         std::vector<p2::student> load();
 
+        /// Writes a new record in a disk `file`
         void add(p2::student &record);
 
+        /// Load the `pos` record in memory and return it
         p2::student read_record(int pos);
 
+        /// Delete logically a record (without removing it from the file)
         void delete_record(int pos);
     };
 
+    // test function, internally, instantiates a `p2::fixed_record` and use it to manipulate a disk file
+    void test(const std::string &file_name) {
+
+        p2::fixed_record fr(file_name);
+
+        do {
+            int option;
+
+            std::cout << std::endl;
+            std::cout << "============== Menu ==============" << std::endl;
+            std::cout << "Options " << std::endl;
+            std::cout << "    [0]: Add a new record" << std::endl;
+            std::cout << "    [1]: Read all records" << std::endl;
+            std::cout << "    [2]: Read the ith record" << std::endl;
+            std::cout << "    [3]: Eliminate the ith record" << std::endl;
+            std::cout << "    [4]: Exit" << std::endl;
+            std::cout << std::endl;
+
+            do {
+                std::cout << "Select an option: ";
+                std::cin >> option;
+            } while (option < 0 || option > 4);
+            std::cout << std::endl;
+
+            switch (option) {
+                case 0 : {
+                    p2::student student{};
+                    p2::init(student);
+                    fr.add(student);
+                    break;
+                }
+
+                case 1 : {
+                    std::vector<p2::student> records = fr.load();
+                    for (p2::student &student: records) {
+                        std::cout << to_string(student) << std::endl;
+                    }
+                    break;
+                }
+                case 2 : {
+                    int position;
+                    std::cout << "Enter the record position: ";
+                    std::cin >> position;
+                    p2::student student = fr.read_record(position);
+                    std::cout << "The [" << position << "] student is: " << to_string(student) << std::endl;
+                    break;
+                }
+                case 3 : {
+                    int position;
+                    std::cout << "Enter the record position: ";
+                    std::cin >> position;
+                    fr.delete_record(position);
+                    std::cout << "The [" << position << "] student was deleted successfully" << std::endl;
+                    break;
+                }
+                default: {
+                    std::system("clear");
+                    return;
+                }
+            }
+
+            std::cout << std::endl << "Press Enter to continue..." << std::endl;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
+            std::system("clear");
+
+        } while (true);
+    }
+}
+
+namespace p2 {
     fixed_record::fixed_record(std::string file_name) : file_name(std::move(file_name)) {
     }
 
@@ -223,74 +295,6 @@ namespace p2 {
         file.write((text) &new_first_del, int_sz);
 
         file.close();
-    }
-
-    void test(const std::string &file_name) {
-
-        p2::fixed_record fr(file_name);
-
-        do {
-            int option;
-
-            std::cout << std::endl;
-            std::cout << "============== Menu ==============" << std::endl;
-            std::cout << "Options " << std::endl;
-            std::cout << "    [0]: Add a new record" << std::endl;
-            std::cout << "    [1]: Read all records" << std::endl;
-            std::cout << "    [2]: Read the ith record" << std::endl;
-            std::cout << "    [3]: Eliminate the ith record" << std::endl;
-            std::cout << "    [4]: Exit" << std::endl;
-            std::cout << std::endl;
-
-            do {
-                std::cout << "Select an option: ";
-                std::cin >> option;
-            } while (option < 0 || option > 4);
-            std::cout << std::endl;
-
-            switch (option) {
-                case 0 : {
-                    p2::student student{};
-                    p2::init(student);
-                    fr.add(student);
-                    break;
-                }
-
-                case 1 : {
-                    std::vector<p2::student> records = fr.load();
-                    for (p2::student &student: records) {
-                        std::cout << to_string(student) << std::endl;
-                    }
-                    break;
-                }
-                case 2 : {
-                    int position;
-                    std::cout << "Enter the record position: ";
-                    std::cin >> position;
-                    p2::student student = fr.read_record(position);
-                    std::cout << "The [" << position << "] student is: " << to_string(student) << std::endl;
-                    break;
-                }
-                case 3 : {
-                    int position;
-                    std::cout << "Enter the record position: ";
-                    std::cin >> position;
-                    fr.delete_record(position);
-                    std::cout << "The [" << position << "] student was deleted successfully" << std::endl;
-                    break;
-                }
-                default: {
-                    std::system("clear");
-                    return;
-                }
-            }
-
-            std::cout << std::endl << "Press Enter to continue..." << std::endl;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin.get();
-            std::system("clear");
-
-        } while (true);
     }
 }
 

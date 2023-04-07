@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
         do {
             std::cout << "Enter the test number: ";
             std::cin >> n_test;
-        } while (n_test < 1 || n_test > 2);
+        } while (n_test < 1 || n_test > 4);
         q = (question) n_test;
     } else {
         q = (question) std::stoi(argv[1]);

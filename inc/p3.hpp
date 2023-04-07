@@ -65,6 +65,11 @@ namespace p3 {
         return ss.str();
     }
 
+    /** Class in charge of manipulate `p3::student` struct
+     *
+     * This class allows to write, read an load `p3::student` records.
+     * The records are delimited by '\n' and this fields by a '|'
+     */
     class variable_record {
     private:
         std::fstream file;
@@ -73,15 +78,84 @@ namespace p3 {
     public:
         explicit variable_record(std::string file_name);
 
+        ~variable_record();
+
+        /// Loads all the records in memory
         std::vector<p3::student> load();
 
+        /// Writes a new record in a disk `file`
         void add(p3::student &record);
 
+        /// Load the `pos` record in memory and return it
         p3::student read_record(int pos);
     };
 
+    // test function, internally, instantiates a `p3::variable_record` and use it to manipulate a disk file
+    void test(const std::string &file_name) {
+        p3::variable_record vr(file_name);
+
+        do {
+            int option;
+
+            std::cout << std::endl;
+            std::cout << "============== Menu ==============" << std::endl;
+            std::cout << "Options " << std::endl;
+            std::cout << "    [0]: Add a new record" << std::endl;
+            std::cout << "    [1]: Read all records" << std::endl;
+            std::cout << "    [2]: Read the ith record" << std::endl;
+            std::cout << "    [3]: Exit" << std::endl;
+            std::cout << std::endl;
+
+            do {
+                std::cout << "Select an option: ";
+                std::cin >> option;
+            } while (option < 0 || option > 3);
+            std::cout << std::endl;
+
+            switch (option) {
+                case 0 : {
+                    p3::student student{};
+                    p3::init(student);
+                    vr.add(student);
+                    break;
+                }
+
+                case 1 : {
+                    std::vector<p3::student> records = vr.load();
+                    for (p3::student &student: records) {
+                        std::cout << to_string(student) << std::endl;
+                    }
+                    break;
+                }
+
+                case 2 : {
+                    int position;
+                    std::cout << "Enter the record position: ";
+                    std::cin >> position;
+                    p3::student student = vr.read_record(position);
+                    std::cout << "The [" << position << "] student is: " << to_string(student) << std::endl;
+                    break;
+                }
+                default: {
+                    std::system("clear");
+                    return;
+                }
+            }
+
+            std::cout << std::endl << "Press Enter to continue..." << std::endl;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
+            std::system("clear");
+
+        } while (true);
+    }
+}
+
+namespace p3 {
     variable_record::variable_record(std::string file_name) : file_name(std::move(file_name)) {
     }
+
+    variable_record::~variable_record() = default;
 
     void variable_record::add(p3::student &record) {
         file.open(file_name, std::ios::app);
@@ -141,66 +215,6 @@ namespace p3 {
 
         file.close();
         return record;
-    }
-
-    void test(const std::string &file_name) {
-        p3::variable_record vr(file_name);
-
-        do {
-            int option;
-
-            std::cout << std::endl;
-            std::cout << "============== Menu ==============" << std::endl;
-            std::cout << "Options " << std::endl;
-            std::cout << "    [0]: Add a new record" << std::endl;
-            std::cout << "    [1]: Read all records" << std::endl;
-            std::cout << "    [2]: Read the ith record" << std::endl;
-            std::cout << "    [3]: Exit" << std::endl;
-            std::cout << std::endl;
-
-            do {
-                std::cout << "Select an option: ";
-                std::cin >> option;
-            } while (option < 0 || option > 3);
-            std::cout << std::endl;
-
-            switch (option) {
-                case 0 : {
-                    p3::student student{};
-                    p3::init(student);
-                    vr.add(student);
-                    break;
-                }
-
-                case 1 : {
-                    std::vector<p3::student> records = vr.load();
-                    for (p3::student &student: records) {
-                        std::cout << to_string(student) << std::endl;
-                    }
-                    break;
-                }
-
-                case 2 : {
-                    int position;
-                    std::cout << "Enter the record position: ";
-                    std::cin >> position;
-                    p3::student student = vr.read_record(position);
-                    std::cout << "The [" << position << "] student is: " << to_string(student) << std::endl;
-                    break;
-                }
-                default: {
-                    std::system("clear");
-                    return;
-                }
-            }
-
-            std::cout << std::endl << "Press Enter to continue..." << std::endl;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin.get();
-            std::system("clear");
-
-        } while (true);
-
     }
 }
 
