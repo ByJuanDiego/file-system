@@ -104,7 +104,7 @@ namespace p2 {
         ~fixed_record();
 
         /// Loads all the records in memory
-        std::vector<p2::student> load();
+        std::vector<std::pair<p2::student, int>> load();
 
         /// Writes a new record in a disk `file`
         void add(p2::student &record);
@@ -147,11 +147,10 @@ namespace p2 {
                     fr.add(student);
                     break;
                 }
-
                 case 1 : {
-                    std::vector<p2::student> records = fr.load();
-                    for (p2::student &student: records) {
-                        std::cout << to_string(student) << std::endl;
+                    std::vector<std::pair<p2::student, int>> records = fr.load();
+                    for (auto& [student, i]: records) {
+                        std::cout << "[" << i << "] => " << to_string(student) << std::endl;
                     }
                     break;
                 }
@@ -192,9 +191,9 @@ namespace p2 {
 
     fixed_record::~fixed_record() = default;
 
-    std::vector<p2::student> fixed_record::load() {
+    std::vector<std::pair<p2::student, int>> fixed_record::load() {
         file.open(file_name, std::ios::in | std::ios::binary);
-        std::vector<p2::student> records;
+        std::vector<std::pair<p2::student, int>> records;
 
         if (!file.is_open()) {
             std::cerr << "Cannot open the file" << std::endl;
@@ -204,6 +203,7 @@ namespace p2 {
         int next_del;
         file.read((text) &next_del, int_sz);
 
+        int i = 0;
         while (!file.eof()) {
             p2::student record{};
             p2::read(file, record, next_del);
@@ -212,9 +212,11 @@ namespace p2 {
                 break;
             }
             if (next_del != 0) {
+                ++i;
                 continue;
             }
-            records.push_back(record);
+            records.emplace_back(record, i);
+            ++i;
         }
 
         file.close();
@@ -288,6 +290,15 @@ namespace p2 {
 
         int new_first_del = (int_sz + pos * (record_size + int_sz));
 
+        /// before overwrite the disk pointers, verifies if the record to delete is already deleted
+        int next_del;
+        file.seekg(new_first_del + record_size);
+        file.read((text) &next_del, int_sz);
+        if (next_del != 0) {
+            throw std::invalid_argument("the record @ this position is already deleted");
+        }
+
+        /// if not, then overwrites the disk pointers
         file.seekp(new_first_del + record_size);
         file.write((text) &first_del, int_sz);
 
