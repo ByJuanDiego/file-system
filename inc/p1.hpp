@@ -14,9 +14,11 @@
 #include <iostream>
 
 #include "func/read.hpp"
+#include "global.hpp"
 
 namespace p1 {
 
+    /// Const values
     constexpr int code_length = 5;
     constexpr int name_length = 11;
     constexpr int last_name_length = 20;
@@ -30,55 +32,20 @@ namespace p1 {
         char career[career_length];
     };
 
+    /// Size of a `p1::student`
     const int record_size = sizeof(p1::student);
 
+    /// Initializes `student` in memory
+    void init(p1::student &student);
+
     /// Writes the student `record` in `stream`
-    std::ostream &operator<<(std::ostream &stream, p1::student &record) {
-        stream << record.code << " " << record.name << " " << record.last_name << " " << record.career << "\n";
-        stream << std::flush;
-        return stream;
-    }
+    std::ostream &operator<<(std::ostream &stream, p1::student &record);
 
     /// Loads a student from a file to memory and stores it in `record`
-    std::istream &operator>>(std::istream &stream, p1::student &record) {
-        stream.read(record.code, code_length);
-        record.code[code_length - 1] = '\0';
-
-        stream.read(record.name, name_length);
-        record.name[name_length - 1] = '\0';
-
-        stream.read(record.last_name, last_name_length);
-        record.last_name[last_name_length - 1] = '\0';
-
-        stream.read(record.career, career_length);
-        record.career[career_length - 1] = '\0';
-        return stream;
-    }
-
-    /// Initializes `student` in memory
-    void init(p1::student &student) {
-        std::cout << "======= Student Information =======" << std::endl;
-        std::cout << "Code: ";
-        read_from_console(student.code, code_length);
-        std::cout << "Name: ";
-        read_from_console(student.name, name_length);
-        std::cout << "Last name: ";
-        read_from_console(student.last_name, last_name_length);
-        std::cout << "Career: ";
-        read_from_console(student.career, career_length);
-    }
+    std::istream &operator>>(std::istream &stream, p1::student &record);
 
     /// Format `student` to a human readable format
-    std::string to_string(p1::student &student) {
-        std::stringstream ss;
-        ss << "("
-           << student.code << ", "
-           << student.name << ", "
-           << student.last_name << ", "
-           << student.career
-           << ")";
-        return ss.str();
-    }
+    std::string to_string(p1::student &student);
 
     /** Class in charge of manipulate `p1::student` struct
      *
@@ -113,6 +80,135 @@ namespace p1 {
     };
 
     // test function, internally, instantiates a `p1::fixed_record` and use it to manipulate a disk file
+    void test(const std::string &file_name);
+}
+
+/// Definitions of functions related to `p1::student` struct manipulation
+namespace p1 {
+    void init(p1::student &student) {
+        std::cout << "======= Student Information =======" << std::endl;
+
+        std::cout << "Code: ";
+        read_from_console(student.code, code_length);
+
+        std::cout << "Name: ";
+        read_from_console(student.name, name_length);
+
+        std::cout << "Last name: ";
+        read_from_console(student.last_name, last_name_length);
+
+        std::cout << "Career: ";
+        read_from_console(student.career, career_length);
+    }
+
+    std::ostream &operator<<(std::ostream &stream, p1::student &record) {
+        stream << record.code << " " << record.name << " " << record.last_name << " " << record.career << "\n";
+        stream << std::flush;
+        return stream;
+    }
+
+    std::istream &operator>>(std::istream &stream, p1::student &record) {
+        stream.read(record.code, code_length);
+        record.code[code_length - 1] = '\0';
+
+        stream.read(record.name, name_length);
+        record.name[name_length - 1] = '\0';
+
+        stream.read(record.last_name, last_name_length);
+        record.last_name[last_name_length - 1] = '\0';
+
+        stream.read(record.career, career_length);
+        record.career[career_length - 1] = '\0';
+        return stream;
+    }
+
+    std::string to_string(p1::student &student) {
+        std::stringstream ss;
+        ss << "("
+           << student.code << ", "
+           << student.name << ", "
+           << student.last_name << ", "
+           << student.career
+           << ")";
+        return ss.str();
+    }
+}
+
+/// Definition of public member functions of `p1::fixed_record`
+namespace p1 {
+    fixed_record::fixed_record(std::string file_name) : file_name(std::move(file_name)) {
+    }
+
+    fixed_record::~fixed_record() = default;
+
+    std::vector<p1::student> fixed_record::load() {
+        file.open(file_name, std::ios::in);
+        std::vector<p1::student> records;
+
+        if (!file.is_open()) {
+            std::cerr << file_not_open;
+            throw std::runtime_error(file_not_open);
+        }
+
+        // Calculates the number of records
+        long n_records = number_of_records();
+
+        // Iterates as many times as number of records exist
+        for (int i = 0; i < n_records; ++i) {
+            p1::student record{};
+
+            // Reads the record
+            file >> record;
+            records.push_back(record);
+        }
+
+        file.close();
+        return records;
+    }
+
+    void fixed_record::add(p1::student &record) {
+        file.open(file_name, std::ios::app);
+
+        if (!file.is_open()) {
+            std::cerr << file_not_open;
+        }
+
+        // Writes the `record` information in the disk file
+        file << record;
+
+        file.close();
+    }
+
+    p1::student fixed_record::read_record(int pos) {
+        file.open(file_name, std::ios::in);
+        p1::student student{};
+
+        if (!file.is_open()) {
+            std::cerr << file_not_open;
+            throw std::runtime_error(file_not_open);
+        }
+
+        // Calculates the maximum valid position
+        long max_pos = number_of_records() - 1;
+
+        // Validates `pos`
+        if (pos > max_pos || pos < 0) {
+            throw std::invalid_argument(not_valid_position);
+        }
+
+        // Seeks the position of the fixed-length record
+        file.seekg(p1::record_size * pos);
+
+        // Reads the information
+        file >> student;
+
+        file.close();
+        return student;
+    }
+}
+
+/// Definition of test function
+namespace p1 {
     void test(const std::string &file_name) {
         p1::fixed_record fr(file_name);
 
@@ -159,7 +255,7 @@ namespace p1 {
                     break;
                 }
                 default: {
-                    std::system("clear");
+                    std::system(clear_console);
                     return;
                 }
             }
@@ -169,62 +265,9 @@ namespace p1 {
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
             std::cin.get();
-            std::system("clear");
+            std::system(clear_console);
 
         } while (true);
-    }
-}
-
-
-// Definition of public member functions of `p1::fixed_record`
-namespace p1 {
-    fixed_record::fixed_record(std::string file_name) : file_name(std::move(file_name)) {
-    }
-
-    fixed_record::~fixed_record() = default;
-
-    std::vector<p1::student> fixed_record::load() {
-        file.open(file_name, std::ios::in);
-        std::vector<p1::student> records;
-        long n_records = number_of_records();
-
-        if (file.is_open()) {
-            for (int i = 0; i < n_records; ++i) {
-                p1::student record{};
-                file >> record;
-                records.push_back(record);
-            }
-        }
-
-        file.close();
-        return records;
-    }
-
-    void fixed_record::add(p1::student &record) {
-        file.open(file_name, std::ios::app);
-
-        if (file.is_open()) {
-            file << record;
-            file.close();
-        } else {
-            std::cerr << "Cannot open the file\n";
-        }
-    }
-
-    p1::student fixed_record::read_record(int pos) {
-        file.open(file_name, std::ios::in);
-        p1::student student{};
-
-        long max_pos = number_of_records() - 1;
-        if (pos > max_pos || pos < 0) {
-            throw std::invalid_argument("invalid position");
-        }
-
-        file.seekg(p1::record_size * pos);
-        file >> student;
-
-        file.close();
-        return student;
     }
 }
 
