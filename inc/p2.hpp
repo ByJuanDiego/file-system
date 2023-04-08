@@ -223,7 +223,8 @@ namespace p2 {
 
         // Seeks the first deleted record in order to overwrite his value with the new record
         file.seekp(first_del);
-        p2::write(file, record, next_del);
+        first_del = 0;
+        p2::write(file, record, first_del);
 
         // Updates the new first deleted record at the header
         file.seekp(0);
