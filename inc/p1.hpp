@@ -146,7 +146,6 @@ namespace p1 {
         std::vector<p1::student> records;
 
         if (!file.is_open()) {
-            std::cerr << file_not_open;
             throw std::runtime_error(file_not_open);
         }
 
@@ -170,7 +169,7 @@ namespace p1 {
         file.open(file_name, std::ios::app);
 
         if (!file.is_open()) {
-            std::cerr << file_not_open;
+            throw std::runtime_error(file_not_open);
         }
 
         // Writes the `record` information in the disk file
@@ -184,7 +183,6 @@ namespace p1 {
         p1::student student{};
 
         if (!file.is_open()) {
-            std::cerr << file_not_open;
             throw std::runtime_error(file_not_open);
         }
 
@@ -193,6 +191,7 @@ namespace p1 {
 
         // Validates `pos`
         if (pos > max_pos || pos < 0) {
+            file.close();
             throw std::invalid_argument(not_valid_position);
         }
 
@@ -234,24 +233,28 @@ namespace p1 {
                 case 0 : {
                     p1::student student{};
                     p1::init(student);
-                    fr.add(student);
+                    try {
+                        fr.add(student);
+                    } CATCH
                     break;
                 }
-
                 case 1 : {
-                    std::vector<p1::student> records = fr.load();
-                    for (p1::student &student: records) {
-                        std::cout << to_string(student) << std::endl;
-                    }
+                    try {
+                        std::vector<p1::student> records = fr.load();
+                        for (p1::student &student: records) {
+                            std::cout << to_string(student) << std::endl;
+                        }
+                    } CATCH
                     break;
                 }
-
                 case 2 : {
                     int position;
                     std::cout << "Enter the record position: ";
                     std::cin >> position;
-                    p1::student student = fr.read_record(position);
-                    std::cout << "The [" << position << "] student is: " << to_string(student) << std::endl;
+                    try {
+                        p1::student student = fr.read_record(position);
+                        std::cout << "The [" << position << "] student is: " << to_string(student) << std::endl;
+                    } CATCH
                     break;
                 }
                 default: {

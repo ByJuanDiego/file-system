@@ -156,7 +156,6 @@ namespace p2 {
         std::vector<std::pair<p2::student, int>> records;
 
         if (!file.is_open()) {
-            std::cerr << file_not_open;
             throw std::runtime_error(file_not_open);
         }
 
@@ -196,8 +195,7 @@ namespace p2 {
         file.open(file_name, std::ios::in | std::ios::out | std::ios::binary);
 
         if (!file.is_open()) {
-            std::cerr << file_not_open;
-            return;
+            throw std::runtime_error(file_not_open);
         }
 
         // Reads the first deleted record position
@@ -240,8 +238,8 @@ namespace p2 {
         }
 
         file.open(file_name, std::ios::in);
+
         if (!file.is_open()) {
-            std::cerr << file_not_open;
             throw std::runtime_error(file_not_open);
         }
 
@@ -254,10 +252,12 @@ namespace p2 {
         p2::read(file, record, next_del);
 
         if (file.fail()) {
+            file.close();
             throw std::invalid_argument(not_valid_position);
         }
 
         if (next_del != 0) {
+            file.close();
             throw std::invalid_argument(reading_deleted_record);
         }
 
@@ -271,6 +271,10 @@ namespace p2 {
         }
 
         file.open(file_name, std::ios::in | std::ios::out | std::ios::ate | std::ios::binary);
+
+        if (!file.is_open()) {
+            throw std::runtime_error(file_not_open);
+        }
 
         /// Reads the first deleted record position
         int first_del;
@@ -286,8 +290,14 @@ namespace p2 {
         file.seekg(new_first_del + record_size);
         file.read((text) &next_del, int_sz);
 
+        if (file.fail()) {
+            file.close();
+            throw std::invalid_argument(not_valid_position);
+        }
+
         /// Before overwrite the disk pointers, verifies if the record to delete is already deleted
         if (next_del != 0) {
+            file.close();
             throw std::invalid_argument(record_already_deleted);
         }
 
@@ -332,30 +342,38 @@ namespace p2 {
                 case 0 : {
                     p2::student student{};
                     p2::init(student);
-                    fr.add(student);
+                    try {
+                        fr.add(student);
+                    } CATCH
                     break;
                 }
                 case 1 : {
-                    std::vector<std::pair<p2::student, int>> records = fr.load();
-                    for (auto &[student, i]: records) {
-                        std::cout << "[" << i << "] => " << to_string(student) << std::endl;
-                    }
+                    try {
+                        std::vector<std::pair<p2::student, int>> records = fr.load();
+                        for (auto &[student, i]: records) {
+                            std::cout << "[" << i << "] => " << to_string(student) << std::endl;
+                        }
+                    } CATCH
                     break;
                 }
                 case 2 : {
                     int position;
                     std::cout << "Enter the record position: ";
                     std::cin >> position;
-                    p2::student student = fr.read_record(position);
-                    std::cout << "The [" << position << "] student is: " << to_string(student) << std::endl;
+                    try {
+                        p2::student student = fr.read_record(position);
+                        std::cout << "The [" << position << "] student is: " << to_string(student) << std::endl;
+                    } CATCH
                     break;
                 }
                 case 3 : {
                     int position;
                     std::cout << "Enter the record position: ";
                     std::cin >> position;
-                    fr.delete_record(position);
-                    std::cout << "The [" << position << "] student was deleted successfully" << std::endl;
+                    try {
+                        fr.delete_record(position);
+                        std::cout << "The [" << position << "] student was deleted successfully" << std::endl;
+                    } CATCH
                     break;
                 }
                 default: {

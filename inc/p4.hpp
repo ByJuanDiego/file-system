@@ -166,12 +166,13 @@ namespace p4 {
         index_file.open(index_file_name, std::ios::in | std::ios::binary);
         data_file.open(data_file_name, std::ios::in | std::ios::binary);
 
-        std::vector<p4::tuition> records;
-
         if (!index_file.is_open() || !data_file.is_open()) {
+            if (index_file.is_open()) index_file.close();
+            if (data_file.is_open()) data_file.close();
             throw std::runtime_error(file_not_open);
         }
 
+        std::vector<p4::tuition> records;
         int i_pos = 0;
 
         while (!index_file.eof()) {
@@ -201,6 +202,8 @@ namespace p4 {
         data_file.open(data_file_name, std::ios::app | std::ios::binary);
 
         if (!index_file.is_open() || !data_file.is_open()) {
+            if (index_file.is_open()) index_file.close();
+            if (data_file.is_open()) data_file.close();
             throw std::runtime_error(file_not_open);
         }
 
@@ -224,6 +227,12 @@ namespace p4 {
 
         index_file.open(index_file_name, std::ios::in | std::ios::binary);
         data_file.open(data_file_name, std::ios::in | std::ios::binary);
+
+        if (!index_file.is_open() || !data_file.is_open()) {
+            if (index_file.is_open()) index_file.close();
+            if (data_file.is_open()) data_file.close();
+            throw std::runtime_error(file_not_open);
+        }
 
         /// Sets the index pointer to the `pos` times `int_sz` value
         index_file.seekg(pos * int_sz);
@@ -277,27 +286,30 @@ namespace p4 {
                 case 0 : {
                     p4::tuition tuition{};
                     p4::init(tuition);
-                    vr.add(tuition);
+                    try {
+                        vr.add(tuition);
+                    } CATCH
                     break;
                 }
-
                 case 1 : {
-                    std::vector<p4::tuition> records = vr.load();
-                    for (p4::tuition &tuition: records) {
-                        std::cout << to_string(tuition) << std::endl;
-                    }
+                    try {
+                        std::vector<p4::tuition> records = vr.load();
+                        for (p4::tuition &tuition: records) {
+                            std::cout << to_string(tuition) << std::endl;
+                        }
+                    } CATCH
                     break;
                 }
-
                 case 2 : {
                     int position;
                     std::cout << "Enter the record position: ";
                     std::cin >> position;
-                    p4::tuition student = vr.read_record(position);
-                    std::cout << "The [" << position << "] student is: " << p4::to_string(student) << std::endl;
+                    try {
+                        p4::tuition student = vr.read_record(position);
+                        std::cout << "The [" << position << "] student is: " << p4::to_string(student) << std::endl;
+                    } CATCH
                     break;
                 }
-
                 default: {
                     std::system(clear_console);
                     return;
