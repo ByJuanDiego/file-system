@@ -164,12 +164,13 @@ namespace p4 {
 
     std::vector<p4::tuition> variable_record::load() {
         index_file.open(index_file_name, std::ios::in | std::ios::binary);
-        data_file.open(data_file_name, std::ios::in | std::ios::binary);
+        if (!index_file.is_open()) {
+            throw std::runtime_error(file_not_open + ": " + index_file_name);
+        }
 
-        if (!index_file.is_open() || !data_file.is_open()) {
-            if (index_file.is_open()) index_file.close();
-            if (data_file.is_open()) data_file.close();
-            throw std::runtime_error(file_not_open);
+        data_file.open(data_file_name, std::ios::in | std::ios::binary);
+        if (!data_file.is_open()) {
+            throw std::runtime_error(file_not_open + ": " + data_file_name);
         }
 
         std::vector<p4::tuition> records;
@@ -199,12 +200,13 @@ namespace p4 {
 
     void variable_record::add(tuition &record) {
         index_file.open(index_file_name, std::ios::app | std::ios::binary);
-        data_file.open(data_file_name, std::ios::app | std::ios::binary);
+        if (!index_file.is_open()) {
+            throw std::runtime_error(file_not_open + ": " + index_file_name);
+        }
 
-        if (!index_file.is_open() || !data_file.is_open()) {
-            if (index_file.is_open()) index_file.close();
-            if (data_file.is_open()) data_file.close();
-            throw std::runtime_error(file_not_open);
+        data_file.open(data_file_name, std::ios::app | std::ios::binary);
+        if (!data_file.is_open()) {
+            throw std::runtime_error(file_not_open + ": " + data_file_name);
         }
 
         /// Assigns the position of the record
@@ -226,12 +228,13 @@ namespace p4 {
         }
 
         index_file.open(index_file_name, std::ios::in | std::ios::binary);
-        data_file.open(data_file_name, std::ios::in | std::ios::binary);
+        if (!index_file.is_open()) {
+            throw std::runtime_error(file_not_open + ": " + index_file_name);
+        }
 
-        if (!index_file.is_open() || !data_file.is_open()) {
-            if (index_file.is_open()) index_file.close();
-            if (data_file.is_open()) data_file.close();
-            throw std::runtime_error(file_not_open);
+        data_file.open(data_file_name, std::ios::in | std::ios::binary);
+        if (!data_file.is_open()) {
+            throw std::runtime_error(file_not_open + ": " + data_file_name);
         }
 
         /// Sets the index pointer to the `pos` times `int_sz` value
@@ -242,6 +245,8 @@ namespace p4 {
         index_file.read((text) &record_pos, int_sz);
 
         if (index_file.fail()) {
+            index_file.close();
+            data_file.close();
             throw std::invalid_argument(not_valid_position);
         }
 
@@ -306,7 +311,7 @@ namespace p4 {
                     std::cin >> position;
                     try {
                         p4::tuition student = vr.read_record(position);
-                        std::cout << "The [" << position << "] student is: " << p4::to_string(student) << std::endl;
+                        std::cout << "The [" << position << "] tuition is: " << p4::to_string(student) << std::endl;
                     } CATCH
                     break;
                 }

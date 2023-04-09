@@ -124,7 +124,6 @@ namespace p3 {
 
     void variable_record::add(p3::student &record) {
         file.open(file_name, std::ios::app);
-
         if (!file.is_open()) {
             throw std::runtime_error(file_not_open);
         }
@@ -137,13 +136,12 @@ namespace p3 {
 
     std::vector<p3::student> variable_record::load() {
         file.open(file_name, std::ios::in);
-        std::vector<p3::student> records;
-        std::string line;
-
         if (!file.is_open()) {
             throw std::runtime_error(file_not_open);
         }
 
+        std::vector<p3::student> records;
+        std::string line;
         /// Ignore fields line
         std::getline(file, line, '\n');
         p3::student record;
@@ -165,9 +163,6 @@ namespace p3 {
         }
 
         file.open(file_name, std::ios::in);
-        p3::student record{};
-        std::string line;
-
         if (!file.is_open()) {
             throw std::runtime_error(file_not_open);
         }
@@ -182,6 +177,7 @@ namespace p3 {
             throw std::invalid_argument(not_valid_position);
         }
 
+        p3::student record{};
         /// Reads the record information
         file >> record;
 

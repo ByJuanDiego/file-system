@@ -143,12 +143,11 @@ namespace p1 {
 
     std::vector<p1::student> fixed_record::load() {
         file.open(file_name, std::ios::in);
-        std::vector<p1::student> records;
-
         if (!file.is_open()) {
             throw std::runtime_error(file_not_open);
         }
 
+        std::vector<p1::student> records;
         // Calculates the number of records
         long n_records = number_of_records();
 
@@ -167,7 +166,6 @@ namespace p1 {
 
     void fixed_record::add(p1::student &record) {
         file.open(file_name, std::ios::app);
-
         if (!file.is_open()) {
             throw std::runtime_error(file_not_open);
         }
@@ -180,12 +178,11 @@ namespace p1 {
 
     p1::student fixed_record::read_record(int pos) {
         file.open(file_name, std::ios::in);
-        p1::student student{};
-
         if (!file.is_open()) {
             throw std::runtime_error(file_not_open);
         }
 
+        p1::student student{};
         // Calculates the maximum valid position
         long max_pos = number_of_records() - 1;
 

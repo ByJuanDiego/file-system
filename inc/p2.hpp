@@ -49,6 +49,19 @@ namespace p2 {
      *
      * This class allows to write, read, load and delete `p2::student` records from a binary file.
      * Uses a implementation of `free-list` to delete a record logically.
+     *
+     *
+     *                          Why in this case is it better to use a binary file?
+     *
+     *     • It allows us to store "variable length fields" that, in fact, have the same bytes length.
+     *       For example, `3.14` and `2200.50` looks like they have different length, however, both are
+     *       represented by 4 bytes, and a binary file help us with manipulating this information
+     *       because he only needs the number of bytes to read or write, that is constant for each record.
+     *
+     *     • In this case, as we are using `int` and `float` as fields types, it is convenient to use
+     *       a binary file to represent the values of this fields by the reason explained above.
+     *
+     *
      */
     class fixed_record {
         std::fstream file;          /// File instance that contains `p1::student` data
@@ -153,12 +166,11 @@ namespace p2 {
 
     std::vector<std::pair<p2::student, int>> fixed_record::load() {
         file.open(file_name, std::ios::in | std::ios::binary);
-        std::vector<std::pair<p2::student, int>> records;
-
         if (!file.is_open()) {
             throw std::runtime_error(file_not_open);
         }
 
+        std::vector<std::pair<p2::student, int>> records;
         // Reads the header in order to skip the firsts 4 bytes
         int next_del;
         file.read((text) &next_del, int_sz);
@@ -193,7 +205,6 @@ namespace p2 {
 
     void fixed_record::add(p2::student &record) {
         file.open(file_name, std::ios::in | std::ios::out | std::ios::binary);
-
         if (!file.is_open()) {
             throw std::runtime_error(file_not_open);
         }
@@ -238,7 +249,6 @@ namespace p2 {
         }
 
         file.open(file_name, std::ios::in);
-
         if (!file.is_open()) {
             throw std::runtime_error(file_not_open);
         }
@@ -271,7 +281,6 @@ namespace p2 {
         }
 
         file.open(file_name, std::ios::in | std::ios::out | std::ios::ate | std::ios::binary);
-
         if (!file.is_open()) {
             throw std::runtime_error(file_not_open);
         }
