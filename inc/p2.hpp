@@ -72,6 +72,10 @@ namespace p2 {
 
         ~fixed_record();
 
+        /// Initializes an empty file with a sentinel, this value indicates the first deleted record in the file.
+        /// This member function should only be used once per file as it overwrites all the data.
+        [[maybe_unused]] void init_file();
+
         /// Loads all the records in memory
         std::vector<std::pair<p2::student, int>> load();
 
@@ -163,6 +167,13 @@ namespace p2 {
     }
 
     fixed_record::~fixed_record() = default;
+
+    void fixed_record::init_file() {
+        file.open(file_name, std::ios::out | std::ios::binary);
+        int sentinel = -1;
+        file.write((text) &sentinel, int_sz);
+        file.close();
+    }
 
     std::vector<std::pair<p2::student, int>> fixed_record::load() {
         file.open(file_name, std::ios::in | std::ios::binary);
@@ -338,17 +349,18 @@ namespace p2 {
             std::cout << "    [1]: Read all records" << std::endl;
             std::cout << "    [2]: Read the ith record" << std::endl;
             std::cout << "    [3]: Eliminate the ith record" << std::endl;
-            std::cout << "    [4]: Exit" << std::endl;
+            std::cout << "    [4]: Initialize empty file" << std::endl;
+            std::cout << "    [5]: Exit" << std::endl;
             std::cout << std::endl;
 
             do {
                 std::cout << "Select an option: ";
                 std::cin >> option;
-            } while (option < 0 || option > 4);
+            } while (option < 0 || option > 5);
             std::cout << std::endl;
 
             switch (option) {
-                case 0 : {
+                case 0: {
                     p2::student student{};
                     p2::init(student);
                     try {
@@ -382,6 +394,12 @@ namespace p2 {
                     try {
                         fr.delete_record(position);
                         std::cout << "The [" << position << "] student was deleted successfully" << std::endl;
+                    } CATCH
+                    break;
+                }
+                case 4 : {
+                    try {
+                        fr.init_file();
                     } CATCH
                     break;
                 }
