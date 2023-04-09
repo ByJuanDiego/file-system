@@ -1,7 +1,7 @@
-#include "../inc/p1.hpp"
-#include "../inc/p2.hpp"
-#include "../inc/p3.hpp"
-#include "../inc/p4.hpp"
+#include "../inc/tests/q1.hpp"
+#include "../inc/tests/q2.hpp"
+#include "../inc/tests/q3.hpp"
+#include "../inc/tests/q4.hpp"
 
 enum class question {
     q1 = 1, q2, q3, q4
@@ -23,16 +23,16 @@ int main(int argc, char *argv[]) {
 
     switch (q) {
         case question::q1:
-            p1::test("./data/datos1.txt");
+            p1::test("./assets/data/datos1.txt");
             break;
         case question::q2:
-            p2::test("./data/datos2.dat");
+            p2::test("./assets/data/datos2.dat");
             break;
         case question::q3:
-            p3::test("./data/datos3.txt");
+            p3::test("./assets/data/datos3.txt");
             break;
         case question::q4:
-            p4::test("./data/datos4.dat", "./metadata/cabecera4.dat");
+            p4::test("./assets/data/datos4.dat", "./assets/metadata/cabecera4.dat");
             break;
     }
 

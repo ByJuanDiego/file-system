@@ -1,5 +1,5 @@
-#ifndef FILE_SYSTEM_P2_HPP
-#define FILE_SYSTEM_P2_HPP
+#ifndef FILE_SYSTEM_Q2_HPP
+#define FILE_SYSTEM_Q2_HPP
 
 #include <fstream>
 #include <utility>
@@ -8,8 +8,8 @@
 #include <limits>
 #include <cstring>
 
-#include "func/read.hpp"
-#include "global.hpp"
+#include "../utils/read.hpp"
+#include "../utils/global.hpp"
 
 namespace p2 {
 
@@ -418,4 +418,4 @@ namespace p2 {
     }
 }
 
-#endif //FILE_SYSTEM_P2_HPP
+#endif //FILE_SYSTEM_Q2_HPP

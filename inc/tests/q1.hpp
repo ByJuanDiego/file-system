@@ -2,8 +2,8 @@
 // Created by juandiego on 3/31/23.
 //
 
-#ifndef FILE_SYSTEM_P1_HPP
-#define FILE_SYSTEM_P1_HPP
+#ifndef FILE_SYSTEM_Q1_HPP
+#define FILE_SYSTEM_Q1_HPP
 
 #include <vector>
 #include <limits>
@@ -13,8 +13,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "func/read.hpp"
-#include "global.hpp"
+#include "../utils/read.hpp"
+#include "../utils/global.hpp"
 
 namespace p1 {
 
@@ -271,4 +271,4 @@ namespace p1 {
     }
 }
 
-#endif //FILE_SYSTEM_P1_HPP
+#endif //FILE_SYSTEM_Q1_HPP

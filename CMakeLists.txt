@@ -5,9 +5,9 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(file_system
         src/main.cpp
-        inc/p1.hpp
-        inc/p2.hpp
-        inc/func/read.hpp
-        inc/p3.hpp
-        inc/p4.hpp
-        inc/global.hpp)
+        inc/tests/q1.hpp
+        inc/tests/q2.hpp
+        inc/tests/q3.hpp
+        inc/tests/q4.hpp
+        inc/utils/read.hpp
+        inc/utils/global.hpp)
