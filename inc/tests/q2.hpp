@@ -336,23 +336,12 @@ namespace p2 {
 /// Definition of test function
 namespace p2 {
     void test(const std::string &file_name) {
-
         p2::fixed_record fr(file_name);
+        std::system(clear_console);
 
         do {
+            std::cout << menu_2 << std::endl;
             int option;
-
-            std::cout << std::endl;
-            std::cout << "============== Menu ==============" << std::endl;
-            std::cout << "Options " << std::endl;
-            std::cout << "    [0]: Add a new record" << std::endl;
-            std::cout << "    [1]: Read all records" << std::endl;
-            std::cout << "    [2]: Read the ith record" << std::endl;
-            std::cout << "    [3]: Eliminate the ith record" << std::endl;
-            std::cout << "    [4]: Initialize empty file" << std::endl;
-            std::cout << "    [5]: Exit" << std::endl;
-            std::cout << std::endl;
-
             do {
                 std::cout << "Select an option: ";
                 std::cin >> option;
@@ -366,6 +355,7 @@ namespace p2 {
                     try {
                         fr.add(student);
                     } CATCH
+                    std::cout << "The new record has been successfully written in disk" << std::endl;
                     break;
                 }
                 case 1 : {
@@ -391,16 +381,32 @@ namespace p2 {
                     int position;
                     std::cout << "Enter the record position: ";
                     std::cin >> position;
-                    try {
-                        fr.delete_record(position);
-                        std::cout << "The [" << position << "] student was deleted successfully" << std::endl;
-                    } CATCH
+
+                    char confirmation = ' ';
+                    std::cout << std::endl << "This option will delete the record [" << position << "]" << std::endl;
+                    std::cout << "Are you sure you want to continue? (y/n): ";
+                    std::cin >> confirmation;
+
+                    if (confirmation == 'y') {
+                        try {
+                            fr.delete_record(position);
+                            std::cout << "The [" << position << "] student was deleted successfully" << std::endl;
+                        } CATCH
+                    }
                     break;
                 }
                 case 4 : {
-                    try {
-                        fr.init_file();
-                    } CATCH
+                    char confirmation = ' ';
+                    std::cout << "This option will clear all data at " << file_name << std::endl;
+                    std::cout << "Are you sure you want to continue? (y/n): ";
+                    std::cin >> confirmation;
+
+                    if (confirmation == 'y') {
+                        try {
+                            fr.init_file();
+                        } CATCH
+                        std::cout << "The 'free list' file was initialized successfully" << std::endl;
+                    }
                     break;
                 }
                 default: {

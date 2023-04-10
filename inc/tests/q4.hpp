@@ -268,18 +268,11 @@ namespace p4 {
 namespace p4 {
     void test(const std::string &data_file, const std::string &header_file) {
         p4::variable_record vr(data_file, header_file);
+        std::system(clear_console);
 
         do {
+            std::cout << menu_1 << std::endl;
             int option;
-
-            std::cout << std::endl;
-            std::cout << "============== Menu ==============" << std::endl;
-            std::cout << "Options " << std::endl;
-            std::cout << "    [0]: Add a new record" << std::endl;
-            std::cout << "    [1]: Read all records" << std::endl;
-            std::cout << "    [2]: Read the ith record" << std::endl;
-            std::cout << "    [3]: Exit" << std::endl;
-            std::cout << std::endl;
 
             do {
                 std::cout << "Select an option: ";
@@ -294,6 +287,7 @@ namespace p4 {
                     try {
                         vr.add(tuition);
                     } CATCH
+                    std::cout << "The new record has been successfully written in disk" << std::endl;
                     break;
                 }
                 case 1 : {
