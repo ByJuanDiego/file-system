@@ -1,4 +1,5 @@
 # File system
+
 Mini file management system for fixed and variable length records
 
 ## Run the project
@@ -28,3 +29,10 @@ After compiling, pass the test number directly to ```main``` by using ```argv```
 chmod +x run.zsh
 ./run.zsh -t <i> # where <i> is the number of the test
 ```
+
+## Team
+
+|                                   Juan Diego Castro                                   |                                      Juan Diego Laredo                                      |
+|:-------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------:|
+|                      ![JDC](https://github.com/ByJuanDiego.png)                       |                        ![JDL](https://github.com/DarKNeSsJuaN25.png)                        |
+| <a href="https://github.com/ByJuanDiego" target="_blank">`github.com/ByJuanDiego`</a> | <a href="https://github.com/DarKNeSsJuaN25" target="_blank">`github.com/DarKNeSsJuaN25`</a> |
