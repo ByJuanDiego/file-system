@@ -34,5 +34,5 @@ chmod +x run.zsh
 
 |                                   Juan Diego Castro                                   |                                      Juan Diego Laredo                                      |
 |:-------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------:|
-|                      ![JDC](https://github.com/ByJuanDiego.png)                       |                        ![JDL](https://github.com/DarKNeSsJuaN25.png)                        |
+|       <img src="https://github.com/ByJuanDiego.png"  width="460" height="460">        |         <img src="https://github.com/DarKNeSsJuaN25.png"  width="460" height="460">         |
 | <a href="https://github.com/ByJuanDiego" target="_blank">`github.com/ByJuanDiego`</a> | <a href="https://github.com/DarKNeSsJuaN25" target="_blank">`github.com/DarKNeSsJuaN25`</a> |
